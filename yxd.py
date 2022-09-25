@@ -10,6 +10,8 @@ parser.add_argument('-o', type=lambda x: int(x,0), dest='startOffset', help='Off
 parser.add_argument('-s', type=lambda x: int(x,0), dest='bufferSize', help='Size of buffer to dump')
 parser.add_argument('-r', dest='reverseDump', help='Do a reverse hex dump',action="store_true")
 parser.add_argument('--plain', dest='plainText', help='Print in xxd style plain text, compatible with xxd',action="store_true")
+parser.add_argument('--xx', dest='xxFormat', help='Print in xx format, a modified xxd-style dump for use with xx',action="store_true")
+parser.add_argument('--ps','-ps', dest='psFormat', help='output in postscript plain hexdump style.',action="store_true")
 parser.add_argument('--py', dest='makePyScript', help='Create a python script to generate the buffer',action="store_true")
 parser.add_argument('--sc', dest='makeShellcode', help='Create a C shellcode loader from buffer',action="store_true")
 parser.add_argument('--style', dest='dumpStyle', help='Show Current Hex Style',action="store_true")
@@ -17,7 +19,7 @@ parser.add_argument('-v', dest='printVersion', help='Print Version Info',action=
 
 versionInfo="""
 yxd - Yuu's heX Dumper
-Version 20220823.1
+Version 20220925.3
 """
 
 def styleDump():
@@ -30,10 +32,10 @@ def styleDump():
                 print()
     sys.exit(0)
 
-def dHex(inBytes,baseOffs,dataLen,blockSize):
+def dHex(inBytes,baseOffs,dataLen,blockSize,hexStyle):
     # This is the main hex dump function containing the style and layout features.
-    offs = 0
-    if args.plainText == True:
+    offs = 0 
+    if ( hexStyle == "xxd" ) or ( hexStyle == "xx") or ( hexStyle == "ps"):
         yc.bytez = {}
         yc.OFFSTYLE = ""
         yc.SEP0  = ": "
@@ -66,11 +68,18 @@ def dHex(inBytes,baseOffs,dataLen,blockSize):
             hexOut += f"{hb[10]}{hb[11]} "
             hexOut += f"{hb[12]}{hb[13]} "
             hexOut += f"{hb[14]}{hb[15]}{yc.SEP2}"
-            print(f"{offsetOut}{hexOut}{bAsc}")
+            if hexStyle == "xx":
+                print(f"{hexOut}; {offsetOut}{bAsc}")
+            elif hexStyle == "ps":
+                print("".join(hexOut.split()),end="")
+            else:
+                print(f"{offsetOut}{hexOut}{bAsc}")
             offs = offs + blockSize
         except Exception as e:
             print(e)
             sys.exit(1)
+    if hexStyle == "ps":
+        print() # Avoid annoying terminal behavior with a new line
 
 def dumpHexString(bChunk):
     # Generates a hex string in the style of \x00\x01\x02\x03
@@ -161,7 +170,13 @@ def reverseDump(inBytes):
 
 if __name__ == '__main__':
     args = parser.parse_args()
-
+    hexStyle = "yxd"          # Default style
+    if args.plainText:
+        hexStyle = "xxd"
+    if args.xxFormat:
+        hexStyle = "xx"
+    if args.psFormat:
+        hexStyle = "ps"
     if args.printVersion:
         print(versionInfo)
         sys.exit(0)
@@ -192,4 +207,4 @@ if __name__ == '__main__':
         reverseDump(binData)
 
     else:
-        dHex(binData,startOffset,binSize,blockSize)
+        dHex(binData,startOffset,binSize,blockSize,hexStyle)

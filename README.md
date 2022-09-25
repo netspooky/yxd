@@ -5,7 +5,7 @@ yxd is a hex dump tool similar to xxd, but with features that I wanted. It's wri
 ## Usage
 
 ```
-usage: yxd [-h] [-f INFILE] [-o STARTOFFSET] [-s BUFFERSIZE] [-r] [--plain] [--py] [--sc] [--style] [-v]
+usage: yxd.py [-h] [-f INFILE] [-o STARTOFFSET] [-s BUFFERSIZE] [-r] [--plain] [--xx] [--ps] [--py] [--sc] [--style] [-v]
 
 yxd - Yuu's heX Dumper
 
@@ -16,6 +16,8 @@ optional arguments:
   -s BUFFERSIZE   Size of buffer to dump
   -r              Do a reverse hex dump
   --plain         Print in xxd style plain text, compatible with xxd
+  --xx            Print in xx format, a modified xxd-style dump for use with xx
+  --ps, -ps       output in postscript plain hexdump style.
   --py            Create a python script to generate the buffer
   --sc            Create a C shellcode loader from buffer
   --style         Show Current Hex Style
@@ -38,7 +40,7 @@ $ cat file.bin | ./yxd
 Specify the beginning offset with the `-o` flag, and the size of the buffer with the `-s` flag. You can use decimal or hex (prefixed with 0x) to represent these numbers.
 
 ```
-$ ./yxd -f base.bin -o 0x40 -s 0x38
+$ yxd -f base.bin -o 0x40 -s 0x38
 00000040│0100 0000 0500 0000│0000 0000 0000 0000│................
 00000050│0000 4000 0000 0000│0000 4000 0000 0000│..@.......@.....
 00000060│0000 0000 0100 0000│0000 0000 0100 0000│................
@@ -59,6 +61,28 @@ $ yxd -f base.bin --plain
 00000050: 0000 4000 0000 0000 0000 4000 0000 0000  ..@.......@.....
 00000060: 0000 0000 0100 0000 0000 0000 0100 0000  ................
 00000070: 0000 2000 0000 0000 b03c 66bf 0600 0f05  .. ......<f.....
+```
+
+### xx Compatible Hex Dump 
+
+yxd can create .xx files compatible with the [xx project](https://github.com/netspooky/xx) by using the flag `--xx`. These are modified xxd style hex dumps with the offset on the side within an `xx` comment, to allow for editing and markup while retaining offset data and the ASCII dump of the file.
+
+```
+$ yxd -f png.5e86c4ab.bin --xx
+8950 4e47 0d0a 1a0a 0000 000d 4948 4452  ; 00000000: .PNG........IHDR
+0000 0001 0000 0001 0100 0000 0037 6ef9  ; 00000010: .............7n.
+2400 0000 1049 4441 5478 9c62 6001 0000  ; 00000020: $....IDATx.b`...
+00ff ff03 0000 0600 0557 bfab d400 0000  ; 00000030: .........W......
+0049 454e 44ae 4260 82                   ; 00000040: .IEND.B`.
+```
+
+### Plain Hex Dump
+
+This is a plain hex dump with all the hexbytes as one long line. This is equivalent to the xxd flag `-ps`. You can use `-ps` or `--ps` to produce this.
+
+```
+$ yxd -f png.5e86c4ab.bin -ps 
+89504e470d0a1a0a0000000d4948445200000001000000010100000000376ef9240000001049444154789c626001000000ffff03000006000557bfabd40000000049454e44ae426082
 ```
 
 ### Reverse Hex Dump
@@ -139,4 +163,4 @@ Use the `--style` flag to see what the current styling looks like.
 
 PRs are welcome. There are still some features I'd like to add, and I would love to see other people's ideas. There are a lot of hex editing tools out there, but this one fits my usecase for simple, portable hex manipulation, that is also pretty looking.
 
-Twitter: @netspooky
+Twitter: [@netspooky_](https://twitter.com/netspooky_)
