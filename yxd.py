@@ -6,6 +6,7 @@ import yxdconfig as yc
 
 parser = argparse.ArgumentParser(description="yxd - Yuu's heX Dumper")
 parser.add_argument('-f', dest='inFile', help='File to open')
+parser.add_argument('inFile', help='File to open', nargs='?')
 parser.add_argument('-o', type=lambda x: int(x,0), dest='startOffset', help='Offset to start within file')
 parser.add_argument('-s', type=lambda x: int(x,0), dest='bufferSize', help='Size of buffer to dump')
 parser.add_argument('-r', dest='reverseDump', help='Do a reverse hex dump',action="store_true")
@@ -19,7 +20,7 @@ parser.add_argument('-v', dest='printVersion', help='Print Version Info',action=
 
 versionInfo="""
 yxd - Yuu's heX Dumper
-Version 20220925.3
+Version 20230216.0
 """
 
 def styleDump():
