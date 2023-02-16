@@ -191,7 +191,7 @@ if __name__ == '__main__':
     startOffset = args.startOffset if args.startOffset else 0
     blockSize   = 16 
 
-    if args.inFile:
+    if args.inFile and args.inFile != "-":
         inFile = args.inFile
         with open(inFile,"rb") as f:
             f.seek(startOffset)
