@@ -287,6 +287,8 @@ class yxd:
         self.blockSize = blockSize
         self.amount = amount
         self.quiet = quiet
+        if quiet == "False":
+            self.dump()
     def styleDump(self):
         for i in range(0,256):
             print(f"{yc.bytez[i]}{i:02X}{yc.EOA} ",end="")
@@ -336,7 +338,7 @@ if __name__ == '__main__':
         binData = sys.stdin.buffer.read()
         binSize = len(binData)
 
-    yxdd = yxd(binData, baseAddr=startOffset, outFormat=hexStyle)
+    yxdd = yxd(binData, baseAddr=startOffset, outFormat=hexStyle, quiet=True)
 
     if args.genPythonScript:
         yxdd.genPythonScript()
