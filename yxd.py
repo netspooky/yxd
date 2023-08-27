@@ -287,7 +287,7 @@ class yxd:
         self.blockSize = blockSize
         self.amount = amount
         self.quiet = quiet
-        if quiet == "False":
+        if quiet != "True":
             self.dump()
     def styleDump(self):
         for i in range(0,256):
