@@ -4,8 +4,12 @@ yxd is a hex dump tool similar to xxd, but with features that I wanted. It's wri
 
 ## Usage
 
+There are two ways to use yxd: from the command line, and as a library.
+
+## Command Line
+
 ```
-usage: yxd.py [-h] [-f INFILE] [-o STARTOFFSET] [-s BUFFERSIZE] [-r] [--plain] [--xx] [--ps] [--py] [--sc] [--style] [-v] [input]
+usage: yxd [-h] [-f INFILE] [-o STARTOFFSET] [-s BUFFERSIZE] [-r] [--plain] [--xx] [--ps] [--py] [--sc] [--style] [-v] [input]
 
 yxd - Yuu's heX Dumper
 
@@ -35,7 +39,7 @@ $ yxd file.bin
 ```
 You can also read from stdin
 ```
-$ cat file.bin | ./yxd
+$ cat file.bin | yxd
 ```
 
 ### Specifying offsets and sizes
@@ -93,8 +97,8 @@ $ yxd png.5e86c4ab.bin -ps
 yxd does reverse hex dumps and supports both yxd and xxd style output.
 
 ```
-$ ./yxd base.bin > base.yxd
-$ ./yxd base.yxd -r
+$ yxd base.bin > base.yxd
+$ yxd base.yxd -r
 ELF>x@@@8@@ �<f�
 ```
 
@@ -103,7 +107,7 @@ ELF>x@@@8@@ �<f�
 One of my main use cases for this tool is to create buffers from files to manipulate them.
 
 ```
-$ ./yxd base.bin --py
+$ yxd base.bin --py
 ```
 
 This dumps the following python script that willwrite the input file and give it a name based on the hash of the file. This is useful if you are doing file format research and need to help track minor changes in files as you edit them. A script form can also make it easier to comment on specific sections, and add your own calculations as needed.
@@ -138,7 +142,7 @@ writeBin(b,shorthash)
 
 Similarly, the `--sc` option can turn your file buffer into a C program that runs it as shellcode
 ```
-$ ./yxd base.bin -o 0x78 --sc
+$ yxd base.bin -o 0x78 --sc
 ```
 
 This grabs the shellcode of this specific binary and turns it into a dropper.
@@ -154,6 +158,31 @@ int main() {
     (*(void(*)()) code)();
     return 0;
 }
+```
+
+## As a Library
+
+The yxd library can do a hex dump with the same style options as in the command line tool, from a library.
+
+Example of basic yxd API usage:
+```
+>>> import yxd
+>>> a = b"\x41"*32
+>>> a += b"\x42"*32
+>>> yxd.yxd(a)
+00000000: 4141 4141 4141 4141 4141 4141 4141 4141  AAAAAAAAAAAAAAAA
+00000010: 4141 4141 4141 4141 4141 4141 4141 4141  AAAAAAAAAAAAAAAA
+00000020: 4242 4242 4242 4242 4242 4242 4242 4242  BBBBBBBBBBBBBBBB
+00000030: 4242 4242 4242 4242 4242 4242 4242 4242  BBBBBBBBBBBBBBBB
+```
+
+By default the yxd library does hex dumps in the xxd format. To output in a different format, you can set the `outFormat` variable to any of the available formats.
+```python
+import yxd
+a = b"\x41"*32
+a += b"\x42"*32
+a += b"\xfa\xde\xdd\xdd\xec\xc5\xde\xee"
+yxd.yxd(a, baseAddr=0x1000, outFormat="yxd")
 ```
 
 ## Styling
