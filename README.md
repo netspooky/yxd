@@ -6,9 +6,13 @@ yxd is a hex dump tool similar to xxd, but with features that I wanted. It's wri
 
 ```
 usage: yxd.py [-h] [-f INFILE] [-o STARTOFFSET] [-s BUFFERSIZE] [-r] [--plain] [--xx] [--ps] [--py] [--sc] [--style] [-v]
+              inFile
 
 yxd - Yuu's heX Dumper
 
+positional arguments:
+  inFile          File to open
+  
 optional arguments:
   -h, --help      show this help message and exit
   -f INFILE       File to open
