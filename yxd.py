@@ -277,7 +277,7 @@ class yxd:
     reverseDump():
         do a reverse hex dump
     """
-    def __init__(self, binData, amount=0, baseAddr=0, outFormat="xxd", color="default", blockSize=16, offset=0,  quiet=False, ):
+    def __init__(self, binData, amount=0, baseAddr=0, outFormat="xxd", color="default", blockSize=16, offset=0,  quiet=False ):
         self.binData = binData
         self.dataLen = len(binData)
         self.baseAddr = baseAddr
@@ -287,7 +287,7 @@ class yxd:
         self.blockSize = blockSize
         self.amount = amount
         self.quiet = quiet
-        if quiet != "True":
+        if quiet != True:
             self.dump()
     def styleDump(self):
         for i in range(0,256):
@@ -339,7 +339,6 @@ if __name__ == '__main__':
         binSize = len(binData)
 
     yxdd = yxd(binData, baseAddr=startOffset, outFormat=hexStyle, quiet=True)
-
     if args.genPythonScript:
         yxdd.genPythonScript()
     elif args.genShellcode:
