@@ -32,7 +32,7 @@ optional arguments:
 
 Read a file with command line argument
 ```
-$ yxd -f file.bin
+$ yxd file.bin
 ```
 You can also read from stdin
 ```
@@ -44,7 +44,7 @@ $ cat file.bin | ./yxd
 Specify the beginning offset with the `-o` flag, and the size of the buffer with the `-s` flag. You can use decimal or hex (prefixed with 0x) to represent these numbers.
 
 ```
-$ yxd -f base.bin -o 0x40 -s 0x38
+$ yxd base.bin -o 0x40 -s 0x38
 00000040│0100 0000 0500 0000│0000 0000 0000 0000│................
 00000050│0000 4000 0000 0000│0000 4000 0000 0000│..@.......@.....
 00000060│0000 0000 0100 0000│0000 0000 0100 0000│................
@@ -56,7 +56,7 @@ $ yxd -f base.bin -o 0x40 -s 0x38
 yxd is also capable of producing xxd-style hex output with the `--plain` flag.
 
 ```
-$ yxd -f base.bin --plain
+$ yxd base.bin --plain
 00000000: 7f45 4c46 0201 0100 0000 0000 0000 0000  .ELF............
 00000010: 0200 3e00 0100 0000 7800 4000 0000 0000  ..>.....x.@.....
 00000020: 4000 0000 0000 0000 0000 0000 0000 0000  @...............
@@ -72,7 +72,7 @@ $ yxd -f base.bin --plain
 yxd can create .xx files compatible with the [xx project](https://github.com/netspooky/xx) by using the flag `--xx`. These are modified xxd style hex dumps with the offset on the side within an `xx` comment, to allow for editing and markup while retaining offset data and the ASCII dump of the file.
 
 ```
-$ yxd -f png.5e86c4ab.bin --xx
+$ yxd png.5e86c4ab.bin --xx
 8950 4e47 0d0a 1a0a 0000 000d 4948 4452  ; 00000000: .PNG........IHDR
 0000 0001 0000 0001 0100 0000 0037 6ef9  ; 00000010: .............7n.
 2400 0000 1049 4441 5478 9c62 6001 0000  ; 00000020: $....IDATx.b`...
@@ -85,7 +85,7 @@ $ yxd -f png.5e86c4ab.bin --xx
 This is a plain hex dump with all the hexbytes as one long line. This is equivalent to the xxd flag `-ps`. You can use `-ps` or `--ps` to produce this.
 
 ```
-$ yxd -f png.5e86c4ab.bin -ps 
+$ yxd png.5e86c4ab.bin -ps 
 89504e470d0a1a0a0000000d4948445200000001000000010100000000376ef9240000001049444154789c626001000000ffff03000006000557bfabd40000000049454e44ae426082
 ```
 
@@ -94,8 +94,8 @@ $ yxd -f png.5e86c4ab.bin -ps
 yxd does reverse hex dumps and supports both yxd and xxd style output.
 
 ```
-$ ./yxd -f base.bin > base.yxd
-$ ./yxd -f base.yxd -r
+$ ./yxd base.bin > base.yxd
+$ ./yxd base.yxd -r
 ELF>x@@@8@@ �<f�
 ```
 
@@ -104,7 +104,7 @@ ELF>x@@@8@@ �<f�
 One of my main use cases for this tool is to create buffers from files to manipulate them.
 
 ```
-$ ./yxd -f base.bin --py
+$ ./yxd base.bin --py
 ```
 
 This dumps the following python script that willwrite the input file and give it a name based on the hash of the file. This is useful if you are doing file format research and need to help track minor changes in files as you edit them. A script form can also make it easier to comment on specific sections, and add your own calculations as needed.
@@ -139,7 +139,7 @@ writeBin(b,shorthash)
 
 Similarly, the `--sc` option can turn your file buffer into a C program that runs it as shellcode
 ```
-$ ./yxd -f base.bin -o 0x78 --sc
+$ ./yxd base.bin -o 0x78 --sc
 ```
 
 This grabs the shellcode of this specific binary and turns it into a dropper.
@@ -167,4 +167,6 @@ Use the `--style` flag to see what the current styling looks like.
 
 PRs are welcome. There are still some features I'd like to add, and I would love to see other people's ideas. There are a lot of hex editing tools out there, but this one fits my usecase for simple, portable hex manipulation, that is also pretty looking.
 
-Twitter: [@netspooky_](https://twitter.com/netspooky_)
+Mastodon: https://haunted.computer/@netspooky
+
+Twitter: [@netspooky](https://twitter.com/netspooky)
