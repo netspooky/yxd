@@ -5,15 +5,14 @@ yxd is a hex dump tool similar to xxd, but with features that I wanted. It's wri
 ## Usage
 
 ```
-usage: yxd.py [-h] [-f INFILE] [-o STARTOFFSET] [-s BUFFERSIZE] [-r] [--plain] [--xx] [--ps] [--py] [--sc] [--style] [-v]
-              inFile
+usage: yxd.py [-h] [-f INFILE] [-o STARTOFFSET] [-s BUFFERSIZE] [-r] [--plain] [--xx] [--ps] [--py] [--sc] [--style] [-v] [input]
 
 yxd - Yuu's heX Dumper
 
 positional arguments:
-  inFile          File to open
-  
-optional arguments:
+  input           File to open
+
+options:
   -h, --help      show this help message and exit
   -f INFILE       File to open
   -o STARTOFFSET  Offset to start within file
