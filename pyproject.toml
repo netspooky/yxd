@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yxdump"
+version = "1.0.0"
+authors = [
+  { name="netspooky", email="u+yxd@n0.lol" },
+]
+description = "Yuu's heX Dumper"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/netspooky/yxd"
+"Bug Tracker" = "https://github.com/netspooky/yxd/issues"
+
+[project.scripts]
+yxd = "yxd:main"
