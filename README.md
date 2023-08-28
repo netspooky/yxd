@@ -2,6 +2,13 @@
 
 yxd is a hex dump tool similar to xxd, but with features that I wanted. It's written in python3, and doesn't have any requirements outside of the python3 standard library (sys, argparse, re). The script itself is pretty simple, and should be easy to add features to if needed.
 
+## Install
+
+You can install the `yxdump` package with pip
+```
+python3 -m pip install yxdump
+```
+
 ## Usage
 
 There are two ways to use yxd: from the command line, and as a library.
@@ -9,6 +16,7 @@ There are two ways to use yxd: from the command line, and as a library.
 ## Command Line
 
 ```
+$ yxd -h
 usage: yxd [-h] [-f INFILE] [-o STARTOFFSET] [-s BUFFERSIZE] [-r] [--plain] [--xx] [--ps] [--py] [--sc] [--style] [-v] [input]
 
 yxd - Yuu's heX Dumper
