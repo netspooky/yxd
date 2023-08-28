@@ -34,7 +34,7 @@ def styleDump():
             else:
                 print()
 
-def dump(inBytes,baseAddr=0,dataLen=0,blockSize=16,outFormat="yxd"):
+def dump(inBytes,baseAddr=0,dataLen=0,blockSize=16,outFormat="xxd"):
     """
     Dump hex.
 
@@ -53,16 +53,29 @@ def dump(inBytes,baseAddr=0,dataLen=0,blockSize=16,outFormat="yxd"):
         The number of bytes per line
     outFormat : str
         The format of hex dump format to do
+
+    Returns
+    -------
+    hexDumpOut : str
+        The text form of the hex dump
     """
     dataLen = len(inBytes) if ( dataLen == 0 ) or ( dataLen > len(inBytes) ) else dataLen # Sanity check
-    offs = 0 
-    if ( outFormat == "xxd" ) or ( outFormat == "xx") or ( outFormat == "ps"):
-        yc.bytez = {}
-        yc.OFFSTYLE = ""
-        yc.SEP0  = ": "
-        yc.SEP1  = " "
-        yc.SEP2  = "  "
-        yc.EOA  = ""
+    offs = 0
+    hexDumpOut = "" 
+    # Style
+    dumpBytez = yc.bytez
+    dumpOffstyle = yc.OFFSTYLE
+    dumpSEP0 = yc.SEP0
+    dumpSEP1 = yc.SEP1
+    dumpSEP2 = yc.SEP2
+    dumpEOA = yc.EOA
+    if ( outFormat == "xxd" ) or ( outFormat == "xx" ) or ( outFormat == "ps" ):
+        dumpBytez = {}
+        dumpOffstyle = ""
+        dumpSEP0  = ": "
+        dumpSEP1  = " "
+        dumpSEP2  = "  "
+        dumpEOA  = ""
     while offs < dataLen:
         try:
             hb = []
@@ -70,9 +83,9 @@ def dump(inBytes,baseAddr=0,dataLen=0,blockSize=16,outFormat="yxd"):
             bChunk = inBytes[offs:offs+blockSize]
             chunkBytes = 0
             for b in bChunk:
-                bFmt = f"{yc.bytez[b]}" if b in yc.bytez.keys() else ""
-                bAsc += f"{bFmt}{chr(b)}{yc.EOA}" if chr(b).isprintable() and b < 0x7F else f"{bFmt}.{yc.EOA}"
-                hb.append(f"{bFmt}{b:02x}{yc.EOA}")
+                bFmt = f"{dumpBytez[b]}" if b in dumpBytez.keys() else ""
+                bAsc += f"{bFmt}{chr(b)}{dumpEOA}" if chr(b).isprintable() and b < 0x7F else f"{bFmt}.{dumpEOA}"
+                hb.append(f"{bFmt}{b:02x}{dumpEOA}")
                 chunkBytes = chunkBytes + 1
             if chunkBytes < blockSize:
                 neededChunks = blockSize - chunkBytes
@@ -80,26 +93,30 @@ def dump(inBytes,baseAddr=0,dataLen=0,blockSize=16,outFormat="yxd"):
                     hb.append("  ")
             realOffs = offs+baseAddr
             # This is where the buffer to print is built
-            offsetOut = f"{yc.OFFSTYLE}{realOffs:08x}{yc.EOA}{yc.SEP0}"
+            offsetOut = f"{dumpOffstyle}{realOffs:08x}{dumpEOA}{dumpSEP0}"
             hexOut =  f"{hb[0]}{hb[1]} "
             hexOut += f"{hb[2]}{hb[3]} "
             hexOut += f"{hb[4]}{hb[5]} "
-            hexOut += f"{hb[6]}{hb[7]}{yc.SEP1}"
+            hexOut += f"{hb[6]}{hb[7]}{dumpSEP1}"
             hexOut += f"{hb[8]}{hb[9]} "
             hexOut += f"{hb[10]}{hb[11]} "
             hexOut += f"{hb[12]}{hb[13]} "
-            hexOut += f"{hb[14]}{hb[15]}{yc.SEP2}"
+            hexOut += f"{hb[14]}{hb[15]}{dumpSEP2}"
             if outFormat == "xx":
                 print(f"{hexOut}; {offsetOut}{bAsc}")
+                hexDumpOut += f"{hexOut}; {offsetOut}{bAsc}\n"
             elif outFormat == "ps":
                 print("".join(hexOut.split()),end="")
+                hexDumpOut += "".join(hexOut.split())
             else:
                 print(f"{offsetOut}{hexOut}{bAsc}")
+                hexDumpOut += f"{offsetOut}{hexOut}{bAsc}\n"
             offs = offs + blockSize
         except Exception as e:
             print(f"yxd.dump: {e}")
     if outFormat == "ps":
         print() # Avoid annoying terminal behavior with a new line
+    return hexDumpOut
 
 def hexString(bChunk):
     """
@@ -298,7 +315,7 @@ class yxd:
                 else:
                     print()
     def dump(self):
-        dump(self.binData,self.baseAddr,self.dataLen,self.blockSize,self.outFormat)
+        return dump(self.binData,self.baseAddr,self.dataLen,self.blockSize,self.outFormat)
     def genPythonScript(self):
         genPythonScript(self.binData)
     def genShellcode(self):
