@@ -323,7 +323,7 @@ class yxd:
     def reverseDump(self):
         reverseDump(self.binData)
 
-if __name__ == '__main__':
+def main():
     args = parser.parse_args()
 
     if args.printVersion:
@@ -364,3 +364,6 @@ if __name__ == '__main__':
         yxdd.reverseDump()
     else:
         yxdd.dump()
+
+if __name__ == '__main__':
+    main()
