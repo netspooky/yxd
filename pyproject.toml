@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "yxdump"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
   { name="netspooky", email="u+yxd@n0.lol" },
 ]
