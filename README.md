@@ -192,6 +192,16 @@ a += b"\x42"*32
 a += b"\xfa\xde\xdd\xdd\xec\xc5\xde\xee"
 yxd.yxd(a, baseAddr=0x1000, outFormat="yxd")
 ```
+You can use the `yxd.dump` function on a buffer the same way. You can also cast the output of the dump command to a variable and print manually.
+```python
+import yxd
+a = b"\x41"*32
+a += b"\x42"*32
+a += b"\xfa\xde\xdd\xdd\xec\xc5\xde\xee"
+yxd.dump(a) # Prints the hex output
+b = yxd.dump(a, quiet=True) # Cast hex out to variable
+print(b) # print that variable
+```
 
 ## Styling
 
