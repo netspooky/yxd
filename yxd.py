@@ -18,7 +18,7 @@ parser.add_argument('--sc', help='Create a C shellcode loader from buffer', dest
 parser.add_argument('--style', help='Show Current Hex Style', dest='dumpStyle', action="store_true")
 parser.add_argument('-v', help='Print Version Info', dest='printVersion', action="store_true")
 
-versionInfo="yxd - Yuu's heX Dumper Version 20230827.0"""
+versionInfo="yxd - Yuu's heX Dumper Version 20230831.0"""
 
 def styleDump():
     """
@@ -34,7 +34,7 @@ def styleDump():
             else:
                 print()
 
-def dump(inBytes,baseAddr=0,dataLen=0,blockSize=16,outFormat="xxd"):
+def dump(inBytes,baseAddr=0,dataLen=0,blockSize=16,outFormat="xxd",quiet=False):
     """
     Dump hex.
 
@@ -53,7 +53,8 @@ def dump(inBytes,baseAddr=0,dataLen=0,blockSize=16,outFormat="xxd"):
         The number of bytes per line
     outFormat : str
         The format of hex dump format to do
-
+    quiet : bool
+        If true, don't print the output to the terminal
     Returns
     -------
     hexDumpOut : str
@@ -103,19 +104,23 @@ def dump(inBytes,baseAddr=0,dataLen=0,blockSize=16,outFormat="xxd"):
             hexOut += f"{hb[12]}{hb[13]} "
             hexOut += f"{hb[14]}{hb[15]}{dumpSEP2}"
             if outFormat == "xx":
-                print(f"{hexOut}; {offsetOut}{bAsc}")
+                if quiet == False:
+                    print(f"{hexOut}; {offsetOut}{bAsc}")
                 hexDumpOut += f"{hexOut}; {offsetOut}{bAsc}\n"
             elif outFormat == "ps":
-                print("".join(hexOut.split()),end="")
+                if quiet == False:
+                    print("".join(hexOut.split()),end="")
                 hexDumpOut += "".join(hexOut.split())
             else:
-                print(f"{offsetOut}{hexOut}{bAsc}")
+                if quiet == False:
+                    print(f"{offsetOut}{hexOut}{bAsc}")
                 hexDumpOut += f"{offsetOut}{hexOut}{bAsc}\n"
             offs = offs + blockSize
         except Exception as e:
             print(f"yxd.dump: {e}")
     if outFormat == "ps":
-        print() # Avoid annoying terminal behavior with a new line
+        if quiet == False:
+            print() # Avoid annoying terminal behavior with a new line
     return hexDumpOut
 
 def hexString(bChunk):
